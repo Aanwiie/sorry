@@ -4,116 +4,159 @@ export default function ApologyWebsite() {
   const [forgiven, setForgiven] = useState(false);
   const [noClicks, setNoClicks] = useState(0);
 
-  const handleNoClick = () => {
-    setNoClicks(noClicks + 1);
-  };
-
-  // Pastel Red Color Variable
-  const pastelRed = "#FFC0CB"; 
+  const handleNoClick = () => setNoClicks(noClicks + 1);
 
   return (
-    <div 
-      style={{ backgroundColor: pastelRed, color: 'white' }} 
-      className="min-h-screen flex flex-col items-center justify-center py-12 px-4 font-sans overflow-x-hidden relative"
-    >
+    <div style={{ 
+      backgroundColor: '#FFC0CB', 
+      minHeight: '100vh', 
+      display: 'flex', 
+      flexDirection: 'column', 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      fontFamily: 'sans-serif', 
+      color: 'white', 
+      position: 'relative',
+      overflowX: 'hidden',
+      padding: '20px'
+    }}>
       
-      {/* Floating Hearts Animation */}
       <style dangerouslySetInnerHTML={{__html: `
         @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
         .font-pacifico { font-family: 'Pacifico', cursive; }
-        
         @keyframes float {
-          0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 1; }
-          100% { transform: translateY(-100vh) translateX(100px) rotate(360deg); opacity: 0; }
+          0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+          100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
         }
-        
-        .heart-float {
-          position: fixed;
-          font-size: 2rem;
-          animation: float 8s infinite linear;
+        .heart { 
+          position: fixed; 
+          font-size: 2rem; 
+          animation: float 8s infinite linear; 
+          z-index: 0; 
           pointer-events: none;
-          z-index: 0;
+        }
+        .glass-card { 
+          background: rgba(0, 0, 0, 0.2); 
+          backdrop-filter: blur(10px); 
+          border: 1px solid rgba(255, 255, 255, 0.3); 
+          border-radius: 24px; 
+          padding: 40px; 
+          text-align: center; 
+          max-width: 600px; 
+          z-index: 10;
+          position: relative;
+          margin-bottom: 40px;
+        }
+        .glass-card h1, .glass-card h2 {
+          margin: 0 0 20px 0;
+        }
+        .glass-card button {
+          padding: 15px 30px;
+          border: none;
+          border-radius: 12px;
+          font-weight: bold;
+          cursor: pointer;
+          font-size: 16px;
+          margin: 10px;
+          transition: all 0.3s ease;
+        }
+        .yes-btn {
+          background: white;
+          color: #ff6b6b;
+        }
+        .yes-btn:hover {
+          background: #ffe0e0;
+          transform: translateY(-2px);
+        }
+        .no-btn {
+          background: rgba(255, 255, 255, 0.2);
+          color: white;
+          border: 1px solid white;
+        }
+        .no-btn:hover {
+          background: rgba(255, 255, 255, 0.3);
+        }
+        .list-item {
+          background: rgba(255, 255, 255, 0.1);
+          padding: 12px;
+          margin: 8px 0;
+          border-radius: 8px;
+          text-align: left;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        @media (max-width: 768px) {
+          .glass-card {
+            padding: 20px;
+            max-width: 100%;
+          }
         }
       `}} />
 
       {/* Floating Hearts */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        {[...Array(12)].map((_, i) => (
-          <div key={i} className="heart-float" style={{left: `${i * 8 + 4}%`, animationDelay: `${i * 0.7}s`}}>❤️</div>
-        ))}
+      {[...Array(10)].map((_, i) => (
+        <div key={i} className="heart" style={{ left: `${i * 10}%`, animationDelay: `${i * 0.5}s` }}>❤️</div>
+      ))}
+
+      {/* Main Content */}
+      <div className="glass-card">
+        <h1 className="font-pacifico" style={{ fontSize: '3rem', marginBottom: '20px' }}>BEBE ! I AM SORRY</h1>
+        
+        <div style={{
+          width: '250px',
+          height: '250px',
+          margin: '0 auto 30px',
+          border: '8px solid white',
+          borderRadius: '12px',
+          overflow: 'hidden',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
+        }}>
+          <img src="/image.png" alt="Us together" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
+        
+        {!forgiven ? (
+          <>
+            <p style={{ fontSize: '1.2rem', marginBottom: '30px', fontWeight: 'bold', lineHeight: '1.6' }}>
+              I really messed up, and I hate knowing that I upset you. You mean everything to me, and I want to make things right. Can you find it in your heart to forgive me?
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px' }}>
+              <button 
+                className="yes-btn"
+                onClick={() => setForgiven(true)}
+              >
+                Yes, I forgive you ❤️
+              </button>
+              <button 
+                className="no-btn"
+                onClick={handleNoClick}
+                style={{ transform: `scale(${Math.max(0.5, 1 - noClicks * 0.1)})` }}
+              >
+                {noClicks === 0 ? "Please no 🥺" : noClicks === 1 ? "Are you sure?" : "Pretty please? 🥺"}
+              </button>
+            </div>
+          </>
+        ) : (
+          <div>
+            <h2 className="font-pacifico" style={{ fontSize: '2.5rem', marginBottom: '20px' }}>Yay! Thank You! 🎉</h2>
+            <p style={{ fontSize: '1.3rem', fontWeight: 'bold' }}>I love you so much. Let me make it up to you! 🥰</p>
+          </div>
+        )}
       </div>
 
-      <div className="relative z-10 w-full flex flex-col items-center justify-center space-y-12">
-        
-        {/* Main Card - Using bg-black/20 to make white text pop on the light red bg */}
-        <div className="max-w-3xl w-full mx-auto bg-black/20 backdrop-blur-lg border border-white/40 rounded-3xl shadow-2xl p-8 sm:p-12 text-center">
-          
-          <h1 className="font-pacifico text-5xl sm:text-6xl mb-8 drop-shadow-md text-white">
-            BEBE ! I AM SORRY
-          </h1>
-
-          <div className="w-56 h-56 sm:w-72 sm:h-72 mx-auto bg-white/20 border-4 border-white/60 rounded-2xl mb-8 flex items-center justify-center overflow-hidden shadow-lg transform rotate-2">
-              <img src="/image.png" alt="Us" className="object-cover w-full h-full" />
-          </div>
-          
-          {!forgiven ? (
-            <div>
-              <p className="text-xl sm:text-2xl mb-10 font-bold text-white leading-relaxed">
-                I really messed up, and I hate knowing that I upset you. You mean everything to me. Can you find it in your heart to forgive me?
-              </p>
-
-              <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
-                <button 
-                  onClick={() => setForgiven(true)}
-                  className="px-8 py-4 bg-white text-pink-500 hover:bg-pink-100 text-xl font-black rounded-2xl transition-all shadow-xl hover:-translate-y-1"
-                >
-                  Yes, I forgive you ❤️
-                </button>
-                
-                <button 
-                  onClick={handleNoClick}
-                  style={{ transform: `scale(${Math.max(0.4, 1 - noClicks * 0.1)})` }}
-                  className="px-8 py-4 bg-white/10 border-2 border-white text-white text-xl font-bold rounded-2xl transition-all"
-                >
-                  {noClicks === 0 ? "Please no 🥺" : noClicks === 1 ? "Are you sure?" : "Pretty please? 🥺"}
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="py-8">
-              <h2 className="font-pacifico text-5xl text-white mb-4">Yay! Thank You!</h2>
-              <p className="text-2xl text-white font-bold">I love you so much. Let me make it up to you! 🥰</p>
-            </div>
-          )}
-        </div>
-
-        {/* 10 Things List */}
-        <div className="max-w-3xl w-full mx-auto bg-black/20 backdrop-blur-lg border border-white/40 rounded-3xl shadow-2xl p-8 sm:p-12 text-center">
-          <h2 className="font-pacifico text-4xl sm:text-5xl text-white mb-8">
-            10 things I love about you
-          </h2>
-          
-          <div className="max-w-md mx-auto">
-            <ul className="text-left space-y-4 text-lg sm:text-xl font-bold text-white">
-              {[
-                "1. That you love me",
-                "2. That you keep up with my shit",
-                "3. You are handsome",
-                "4. You are too handsome",
-                "5. The sex is good",
-                "6. You always feed me",
-                "7. You are kind",
-                "8. You are bholu bandar",
-                "9. You have me",
-                "10. You're smart & talented"
-              ].map((item, index) => (
-                <li key={index} className="bg-white/20 p-4 rounded-xl border border-white/30 text-white">
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+      {/* List Section */}
+      <div className="glass-card">
+        <h2 className="font-pacifico" style={{ fontSize: '2rem' }}>10 things I love about you</h2>
+        <ul style={{ listStyle: 'none', padding: '0', margin: '20px 0 0 0', textAlign: 'left' }}>
+          <li className="list-item">1. That you love me</li>
+          <li className="list-item">2. That you keep up with my shit</li>
+          <li className="list-item">3. You are handsome</li>
+          <li className="list-item">4. You are too handsome</li>
+          <li className="list-item">5. The sex is good</li>
+          <li className="list-item">6. You always feed me</li>
+          <li className="list-item">7. You are kind</li>
+          <li className="list-item">8. You are bholu bandar</li>
+          <li className="list-item">9. You have me</li>
+          <li className="list-item">10. You're smart & talented</li>
+        </ul>
       </div>
     </div>
   );
